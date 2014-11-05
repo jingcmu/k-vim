@@ -18,18 +18,31 @@
 "
 "       -> 插件配置和具体设置在vimrc.bundles中
 "==========================================
- 
+
 "==========================================
+
+"==========================================
+" NERDTree 快捷键
+"==========================================
+nmap <F5> :silent! NERDTreeToggle<cr>
+
 " Initial Plugin 加载插件
 "==========================================
 
 " 修改leader键
-let mapleader = ','
-let g:mapleader = ','
+let mapleader = 't'
+let g:mapleader = 't'
+" Fast saving
+nmap <leader>w :w!<cr>
+" Fast reloading of the .vimrc
+map <silent> <leader>ss :source ~/.vimrc<cr>
+" Fast editing of .vimrc
+map <silent> <leader>ee :e ~/.vimrc<cr>
+" When .vimrc is edited, reload it
+autocmd! bufwritepost .vimrc source ~/.vimrc
 
 " 开启语法高亮
 syntax on
-
 
 " install Vundle bundles
 if filereadable(expand("~/.vimrc.bundles"))
@@ -45,7 +58,7 @@ filetype plugin indent on
 
 "以下配置有详细说明，一些特性不喜欢可以直接注解掉
 
-"set guifont=Monaco:h20          " 字体 && 字号
+set guifont=Monaco:h20          " 字体 && 字号
 
 " history存储容量
 set history=2000
@@ -59,19 +72,18 @@ filetype plugin on
 "启动自动补全
 filetype plugin indent on
 
-set autoread          " 文件修改之后自动载入。
+set autoread          " 文件从外部修改之后自动载入。
 set shortmess=atI       " 启动的时候不显示那个援助索马里儿童的提示
 
-" 备份,到另一个位置. 防止误删, 目前是取消备份
-"set backup
-"set backupext=.bak
-"set backupdir=/tmp/vimbk/
+" 备份,到另一个位置. 防止误删, 目前是启用备份
+" set backup
+" set backupext=.bak
+" set backupdir=/tmp/vimbk/
 
 " 取消备份。 视情况自己改
 set nobackup
 " 关闭交换文件
 set noswapfile
-
 
 "create undo file
 if has('persistent_undo')
@@ -81,7 +93,7 @@ if has('persistent_undo')
   set undodir=/tmp/vimundo/
 endif
 
-set wildignore=*.swp,*.bak,*.pyc,*.class,.svn
+set wildignore=*.swp,*.bak,*.pyc,*.class,.svn,*.yuv,*.y4m,*.ivf,*.md5
 " 突出显示当前行等
 set cursorcolumn
 set cursorline          " 突出显示当前行
@@ -91,6 +103,8 @@ set cursorline          " 突出显示当前行
 "好处：误删什么的，如果以前屏幕打开，可以找回
 set t_ti= t_te=
 
+" 设置命令行高度是2 行
+set cmdheight=2
 
 "- 则点击光标不会换,用于复制
 set mouse-=a             " 鼠标暂不启用, 键盘党....
@@ -178,9 +192,9 @@ set autoindent    " 打开自动缩进
 " never add copyindent, case error   " copy the previous indentation on autoindenting
 
 " tab相关变更
-set tabstop=4     " 设置Tab键的宽度        [等同的空格个数]
-set shiftwidth=4  " 每一次缩进对应的空格数
-set softtabstop=4 " 按退格键时可以一次删掉 4 个空格
+set tabstop=2     " 设置Tab键的宽度        [等同的空格个数]
+set shiftwidth=2  " 每一次缩进对应的空格数
+set softtabstop=2 " 按退格键时可以一次删掉 4 个空格
 set smarttab      " insert tabs on the start of a line according to shiftwidth, not tabstop 按退格键时可以一次删掉 4 个空格
 set expandtab     " 将Tab自动转化成空格    [需要输入真正的Tab键时，使用 Ctrl+V + Tab]
 set shiftround    " 缩进时，取整 use multiple of shiftwidth when indenting with '<' and '>'
@@ -192,7 +206,6 @@ set ttyfast
 
 " 00x增减数字时使用十进制
 set nrformats=
-
 
 " 相对行号      行号变成相对，可以用 nj  nk   进行跳转 5j   5k 上下跳5行
 set relativenumber number
@@ -246,7 +259,7 @@ set completeopt=longest,menu
 " 增强模式中的命令行自动完成操作
 set wildmenu
 " Ignore compiled files
-set wildignore=*.o,*~,*.pyc,*.class
+set wildignore=*.o,*~,*.pyc,*.class,*.a,*.md5,*.ivf
 
 "离开插入模式后自动关闭预览窗口
 autocmd InsertLeave * if pumvisible() == 0|pclose|endif
@@ -271,10 +284,10 @@ endif
 " 主要按键重定义
 
 " 关闭方向键, 强迫自己用 hjkl
-map <Left> <Nop>
-map <Right> <Nop>
-map <Up> <Nop>
-map <Down> <Nop>
+"map <Left> <Nop>
+"map <Right> <Nop>
+"map <Up> <Nop>
+"map <Down> <Nop>
 
 "Treat long lines as break lines (useful when moving around in them)
 "se swap之后，同物理行上线直接跳
@@ -346,8 +359,8 @@ cnoremap <C-e> <End>
 " Map <Space> to / (search) and Ctrl-<Space> to ? (backwards search)
 map <space> /
 " 进入搜索Use sane regexes"
-nnoremap / /\v
-vnoremap / /\v
+"nnoremap / /\v
+"vnoremap / /\v
 
 "Keep search pattern at the center of the screen."
 nnoremap <silent> n nzz
@@ -370,8 +383,8 @@ noremap <silent><leader>/ :nohls<CR>
 " :b1 :b2   :bf :bl
 nnoremap [b :bprevious<cr>
 nnoremap ]b :bnext<cr>
-noremap <left> :bp<CR>
-noremap <right> :bn<CR>
+noremap <silent> <leader><left> :bp<CR>
+noremap <silent> <leader><right> :bn<CR>
 
 
 " tab 操作
@@ -385,12 +398,11 @@ map <leader>tl :tablast<cr>
 map <leader>tj :tabnext<cr>
 map <leader>tk :tabprev<cr>
 map <leader>tn :tabnext<cr>
-map <leader>tp :tabprev<cr>
+" map <leader>tp :tabprev<cr>
 
 map <leader>te :tabedit<cr>
 map <leader>td :tabclose<cr>
 map <leader>tm :tabm<cr>
-
 
 " 新建tab  Ctrl+t
 nnoremap <C-t>     :tabnew<CR>
@@ -532,12 +544,12 @@ if has("gui_running")
 endif
 
 " theme主题
-set background=dark
-colorscheme solarized
+set background=light
+" colorscheme solarized
 set t_Co=256
 
-"colorscheme molokai
-"colorscheme desert
+" colorscheme molokai
+colorscheme desert
 
 "设置标记一列的背景颜色和数字一行颜色一致
 hi! link SignColumn   LineNr
@@ -554,4 +566,26 @@ highlight SpellRare term=underline cterm=underline
 highlight clear SpellLocal
 highlight SpellLocal term=underline cterm=underline
 
+if filereadable("workspace.vim")
+  source workspace.vim
+endif
 
+let g:ycm_global_ycm_extra_conf='~/.vim/plugin/.ycm_extra_conf.py'
+nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
+nnoremap <silent> <leader>c :CommandT<CR>
+
+"taglist{
+let Tlist_Show_One_File = 1
+let Tlist_Exit_OnlyWindow = 1
+let Tlist_Use_Right_Window = 1
+let Tlist_GainFocus_On_ToggleOpen = 1
+let Tlist_Ctags_Cmd='/usr/local/bin/ctags'
+nnoremap <leader>tl : Tlist<CR>
+"}
+
+" 支持鼠标
+set mouse+=a
+
+" 避免出现乱码
+set fenc=utf-8     " default fileencoding
+set fencs=utf-8,gb18030,gbk,gb2312,cp936,ucs-bom,euc-jp
